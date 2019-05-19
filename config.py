@@ -31,10 +31,10 @@ listen_sharing_groups = 'Home|test|群|1|2|3|4|5|6|7|8|超市|生活|交流'  # 
 
 
 #连接mysql
-mysql_url = "39.104.77.201"
-mysql_userName = "root"
-mysql_passWd = "976225li"
-mysql_port = "3306"
+mysql_url = "39.104.77.2"
+mysql_userName = "roottest"
+mysql_passWd = "9765te"
+mysql_port = "336"
 mysql_dbName = "wxrobot"
 
 
