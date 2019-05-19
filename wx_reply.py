@@ -1,7 +1,11 @@
+# coding=UTF-8
+
 # 好友功能
 import re
 
 import tuling_robot
+
+
 
 
 def auto_accept_friends(msg):

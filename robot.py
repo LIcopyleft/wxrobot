@@ -1,16 +1,33 @@
+# coding=UTF-8
 from wxpy import *
 
+import count
 import wx_reply
 import wx_command
 import load
-
-
+import pickle
+import shedule
+import threading
 # 微信机器人，缓存登录信息，console_qr表示在控制台打出二维码，部署到服务器时需要加上
 # 如果你不需要部署到服务器中，可以去掉console_qr=True这个参数
 bot = Bot(cache_path=True)
+
+bot1 = Bot(cache_path=True)
+
+
 #bot = Bot(cache_path=True, console_qr=True)
 # 加载配置信息到机器人
+
 load.load_config_to_bot(bot)
+
+
+
+# 重点是rb和r的区别，rb是打开2进制文件，文本文件用r
+f = open('wxpy.pkl','rb')
+data = pickle.load(f)
+#print(data)
+
+#定时任务
 
 
 """好友功能"""
@@ -29,14 +46,21 @@ def friend_msg(msg):
         wx_reply.auto_reply(msg)
         return None
     elif msg.type == RECORDING:
-        return '不停不停，王八念经'
+        print (msg)
+        msg.reply(msg)
+        return '不要停，继续say'
     else:
         pass
 
 
 """群功能"""
+
 @bot.register(chats=Group)
 def group_msg(msg):
+    count.countNum(msg)
+    # 统计当月转发次数
+    #return '「{0}」当月已转发条数：「{0}」，当月群转发总数「{1}」'.format(msg.member.name, msg.chat.name)
+
     """接收群消息"""
     # 群@转发功能
     if msg.is_at and msg.bot.is_forward_group_at_msg:
@@ -53,8 +77,13 @@ def group_msg(msg):
                 # 不用@直接回复
                 wx_reply.auto_reply(msg)
     elif msg.type == SHARING and msg.bot.is_listen_sharing and msg.chat in msg.bot.listen_sharing_groups:
+
+
         # 群分享转发监控，防止分享广告
         msg.forward(msg.bot.master, prefix='分享监控：「{0}」在「{1}」分享了：'.format(msg.member.name, msg.chat.name))
+
+
+
     else:
         pass
     # 监听好友群聊，如老板讲话
